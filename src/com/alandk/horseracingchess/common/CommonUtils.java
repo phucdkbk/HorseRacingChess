@@ -9,6 +9,8 @@ import com.alandk.horseracingchess.object.Game;
 import com.alandk.horseracingchess.object.Horse;
 import com.alandk.horseracingchess.object.Player;
 import com.alandk.horseracingchess.object.Position;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -91,4 +93,37 @@ public class CommonUtils {
         return postionIdx += 13 * (currentPlayer.getIndexSegment() - standPlayer.getIndexSegment());
     }
 
+    private static List<Horse> getListCanMoveHorse(Game game, int step) {
+        List<Horse> listCanMoveHorses = new ArrayList<>();
+        Player runningPlayer = game.getCurrentPlayer();
+        for (int i = 0; i < runningPlayer.getListHorse().size(); i++) {
+            Horse aHorse = runningPlayer.getListHorse().get(i);
+            if (canMoveAHorse(aHorse, game, step)) {
+                listCanMoveHorses.add(aHorse);
+            }
+        }
+        return listCanMoveHorses;
+    }
+
+    private static boolean canMoveAHorse(Horse runningHorse, Game game, int step) {
+        boolean canMove = true;
+        int currentIdxPosition = runningHorse.getPostition().getIndex();
+        int nextIdxPositionIfMove = runningHorse.getPostition().getIndex() + step;
+        for (int i = 0; i < game.getListPlayers().size(); i++) {
+            Player aPlayer = game.getListPlayers().get(i);
+            if (aPlayer.getColor() != game.getCurrentPlayer().getColor()) {
+                for (int j = 0; j < aPlayer.getListHorse().size(); j++) {
+                    Horse standHorse = aPlayer.getListHorse().get(j);
+                    if (standHorse.getPostition().getType() == Constants.POSITION.TYPE.RUNNING) {
+                        int relativePosition = getRelativePosition(standHorse, game.getCurrentPlayer(), aPlayer);
+                        if (relativePosition > currentIdxPosition && relativePosition < nextIdxPositionIfMove) {
+                            canMove = false;
+                            break;
+                        }                        
+                    }
+                }
+            }
+        }
+        return canMove;
+    }
 }

@@ -45,7 +45,7 @@ public class TestMove {
     //
      @Test
      public void testCanMove() throws IOException {
-         Game game = TestUtils.readGameFromFile();
+         Game game = TestUtils.readGameFromFile();         
          assertEquals(1, 2);
      }
 }
