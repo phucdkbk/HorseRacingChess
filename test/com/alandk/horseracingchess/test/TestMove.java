@@ -6,6 +6,7 @@ package com.alandk.horseracingchess.test;
  * and open the template in the editor.
  */
 
+import com.alandk.horseracingchess.object.Game;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,7 +45,7 @@ public class TestMove {
     //
      @Test
      public void testCanMove() throws IOException {
-         TestUtils.readGameFromFile();
+         Game game = TestUtils.readGameFromFile();
          assertEquals(1, 2);
      }
 }
