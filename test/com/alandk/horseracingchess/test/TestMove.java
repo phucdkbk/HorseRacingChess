@@ -49,13 +49,13 @@ public class TestMove {
     public void testCanMove() throws IOException {
         Game game = TestUtils.readGameFromFile();
         List<Horse> listCanMoveHorse = CommonUtils.getListCanMoveHorse(game, 2);
-        assertEquals(listCanMoveHorse.size(), 2);
+        assertEquals(listCanMoveHorse.size(), 1);
     }
 
     @Test
     public void testCanKick() throws IOException {
         Game game = TestUtils.readGameFromFile();
-        boolean canKick = CommonUtils.canKickOtherPlayer(game, 2, game.getListPlayers().get(0).getListHorse().get(0));
+        boolean canKick = CommonUtils.canKickOtherPlayer(game, 3, game.getListPlayers().get(0).getListHorse().get(0));
         assertEquals(canKick, true);
     }
 }

@@ -30,7 +30,7 @@ public interface Constants {
 
             public static final int START_RUNNING_INDEX = -1000;
             public static final int FINISH_RUNNING_INDEX = 1000;
-            public static final int MAX_INDEX_WHEN_FINIH = 56;
+            public static final int MAX_INDEX_WHEN_END_RUNNING = 56;
         }
     }
 

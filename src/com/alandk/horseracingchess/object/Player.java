@@ -87,6 +87,10 @@ public class Player {
                 } else {
                     CommonUtils.runHorse(position, step);
                 }
+                break;
+            case Constants.POSITION.TYPE.FINISH:
+                position.setIndex(step);
+                break;
         }
     }
 

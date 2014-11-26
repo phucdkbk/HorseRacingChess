@@ -78,13 +78,14 @@ public class CommonUtils {
     }
 
     public static void runHorse(Position position, int step) {
-        if (position.getIndex() == Constants.POSITION.INDEX.START_RUNNING_INDEX) {
-            position.setIndex(step);
-        } else {
-            position.setIndex(position.getIndex() + step);
-        }
-        if (position.getIndex() == Constants.POSITION.INDEX.MAX_INDEX_WHEN_FINIH) {
-            position.setType(Constants.POSITION.TYPE.FINISH);
+        switch (position.getIndex()) {
+            case Constants.POSITION.INDEX.START_RUNNING_INDEX:
+                position.setIndex(step);
+                break;
+            case Constants.POSITION.INDEX.MAX_INDEX_WHEN_END_RUNNING:
+                position.setType(Constants.POSITION.TYPE.FINISH);
+                position.setIndex(step);
+                break;
         }
     }
 
@@ -124,14 +125,14 @@ public class CommonUtils {
 
                 boolean haveHorseBetween = false;
                 for (int i = absCurrentIdxPositon + 1; i < absNextIdxPositonIfMove; i++) {
-                    Horse aHorse = getHorseInPosition(game, i);
+                    Horse aHorse = getHorseInRunningPosition(game, i);
                     if (aHorse != null) {
                         haveHorseBetween = true;
                         break;
                     }
                 }
                 if (!haveHorseBetween) {
-                    Horse aHorse = getHorseInPosition(game, absNextIdxPositonIfMove);
+                    Horse aHorse = getHorseInRunningPosition(game, absNextIdxPositonIfMove);
                     if (aHorse != null) {
                         if (game.getCurrentPlayer().getListHorse().contains(aHorse)) {
                             canMove = true;
@@ -146,27 +147,14 @@ public class CommonUtils {
                 }
                 break;
             case Constants.POSITION.TYPE.FINISH:
-                
+                canMove = false;
+                if (runningHorse.getPostition().getIndex() + 1 == step) {
+                    if (getHorseInFinishPosition(game.getCurrentPlayer(), step) != null) {
+                        canMove = true;
+                    }
+                }
                 break;
         }
-
-//        int currentIdxPosition = runningHorse.getPostition().getIndex();
-//        int nextIdxPositionIfMove = runningHorse.getPostition().getIndex() + step;
-//        for (int i = 0; i < game.getListPlayers().size(); i++) {
-//            Player aPlayer = game.getListPlayers().get(i);
-//            if (aPlayer.getColor() != game.getCurrentPlayer().getColor()) {
-//                for (int j = 0; j < aPlayer.getListHorse().size(); j++) {
-//                    Horse standHorse = aPlayer.getListHorse().get(j);
-//                    if (standHorse.getPostition().getType() == Constants.POSITION.TYPE.RUNNING) {
-//                        int relativePosition = getRelativePosition(standHorse, game.getCurrentPlayer(), aPlayer);
-//                        if (relativePosition > currentIdxPosition && relativePosition < nextIdxPositionIfMove) {
-//                            canMove = false;
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        }
         return canMove;
     }
 
@@ -185,7 +173,7 @@ public class CommonUtils {
         return haveHorseInStartPosition;
     }
 
-    private static Horse getHorseInPosition(Game game, int index) {
+    private static Horse getHorseInRunningPosition(Game game, int index) {
         Horse aHorse = null;
         for (int i = 0; i < game.getListPlayers().size(); i++) {
             for (int j = 0; j < game.getListPlayers().get(i).getListHorse().size(); j++) {
@@ -202,10 +190,23 @@ public class CommonUtils {
         return aHorse;
     }
 
+    private static Horse getHorseInFinishPosition(Player player, int index) {
+        Horse aHorse = null;
+        for (int i = 0; i < player.getListHorse().size(); i++) {
+            Horse checkHorse = player.getListHorse().get(i);
+            if (checkHorse.getPostition().getType() == Constants.POSITION.TYPE.FINISH) {
+                if (checkHorse.getPostition().getIndex() == index) {
+                    return checkHorse;
+                }
+            }
+        }
+        return aHorse;
+    }
+
     private static int getAbsoluteIdxPosition(int index, Player player) {
         int absoluteIdxPosition = index - player.getIndexSegment() * Constants.DIFF_IDX;
         if (absoluteIdxPosition < 0) {
-            absoluteIdxPosition += Constants.POSITION.INDEX.MAX_INDEX_WHEN_FINIH;
+            absoluteIdxPosition += Constants.POSITION.INDEX.MAX_INDEX_WHEN_END_RUNNING;
         }
         return absoluteIdxPosition;
     }

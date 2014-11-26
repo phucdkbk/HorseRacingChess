@@ -37,7 +37,7 @@ public class TestUtils {
         gameConfig.getMapPlayerType().put(4, Constants.PLAYER.TYPE.HUMAN);
         Game game = new Game(gameConfig);
 
-        List<String> listLines = Files.readAllLines(Paths.get("E:\\phucdk\\HippocampusChess\\logic\\HippocampusChessLogic\\test\\com\\alandk\\horseracingchess\\test\\game"), Charset.defaultCharset());
+        List<String> listLines = Files.readAllLines(Paths.get("E:\\phucdk\\HorseRacingChess\\logic\\HorseRacingChess\\test\\com\\alandk\\horseracingchess\\test\\game"), Charset.defaultCharset());
 
         String line1 = listLines.get(0);
         line1 = line1.replaceAll("       ", " ").replaceAll("   ", "").replaceAll("   ", " ").replaceAll("  ", " ").replaceAll("  ", " ").replaceAll("  ", " ").replaceAll("  ", " ");
@@ -182,7 +182,7 @@ public class TestUtils {
                 player.setCountRunningHorse(player.getCountRunningHorse() + 1);
                 Horse aHorse = player.getListHorse().get(player.getCountRunningHorse() - 1);
                 aHorse.getPostition().setType(Constants.POSITION.TYPE.RUNNING);
-                aHorse.getPostition().setIndex(positionIdx + Integer.valueOf(value).intValue() * Constants.DIFF_IDX);
+                aHorse.getPostition().setIndex(positionIdx + (Integer.valueOf(value).intValue() - 1) * Constants.DIFF_IDX);
             }
         }
     }
